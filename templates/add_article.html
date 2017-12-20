@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/kindeditor-4.1.10/kindeditor-all.js"></script>
+</head>
+<body>
+    <div style="width: 1060px;margin: 50px">
+        <form action="/add_article.html"  class="form-horizontal" method="POST" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1">文章标题</label>
+                {{ obj.title }}
+            </div>
+                <div class="form-group">
+                <label for="exampleInputEmail1">文章简介</label>
+                {{ obj.summary }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">文章正文</label>
+                {{ obj.content }}
+            </div>
+            <div class="form-group">
+                <p>文章分类</p>
+                {{ obj.article_type_id }}
+            </div>
+            <div class="form-group">
+                <p>个人分类</p>
+                {{ obj.category_id }}
+            </div>
+            <div class="form-group">
+                <p>个人标签</p>
+                {{ obj.tags_id }}
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" class="btn btn-default" value="保存">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+         KindEditor.create("#c1",{
+            width: "1000px",
+            height: "400px",
+            resizeType:1,
+            uploadJson: '/upload_img.html',
+            extraFileUploadParams:{
+                "csrfmiddlewaretoken":"{{ csrf_token }}"
+            }
+        })
+    </script>
+</body>
+</html>

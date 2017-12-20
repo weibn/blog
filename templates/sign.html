@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>帐号注册</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <style>
+        .outer{
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            width: 800px;
+            margin-left: -350px;
+{#            border: 1px solid red;#}
+        }
+        .outer h2{
+            margin-left: 250px;
+            margin-bottom: 50px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <h2>用户注册</h2>
+        <form class="form-horizontal" method="POST" action="/reg.html" id="f1" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-6">
+              {{ obj.username }}
+            </div>
+              {{ obj.errors.username.0 }}
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-6">
+              {{ obj.email }}
+            </div>{{ obj.errors.email.0 }}
+          </div>
+           <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">昵称</label>
+            <div class="col-sm-6">
+              {{ obj.nickname }}
+            </div>{{ obj.errors.nickname.0 }}
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-6">
+              {{ obj.password }}
+            </div>{{ obj.errors.password.0 }}
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+            <div class="col-sm-6">
+              {{ obj.pwd_again }}
+            </div>{{ obj.errors.pwd_again.0 }}<span id="msg"></span>
+          </div>
+            <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">上传头像</label>
+            <div class="col-sm-3">
+              {{ obj.avatar }}
+            </div>{{ obj.errors.avatar.0 }}
+          </div>
+            <div class="form-group" style="margin-top: 60px">
+                <label class="col-sm-2 control-label">验证码</label>
+                <div class="col-sm-3">
+                  {{ obj.code }}
+                </div>
+                <div class="col-sm-5">
+                  <img style="width: 120px;height: 30px;" src="/check_code/" id="img-code">
+                </div><span style="color: red"> {{ obj.errors.code.0 }}</span>
+            </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <input type="submit" class="btn btn-default" value="提交">
+            </div>
+          </div>
+        </form>
+        <div style="position: absolute;margin-left: 17.2%;margin-top: -22.6%">
+        <form action="/up_img/" method="POST" target="ifr" enctype="multipart/form-data" id="f2">
+            {% csrf_token %}
+             <iframe name="ifr" id="ifr" style="display: none">
+            </iframe>
+            <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label"></label>
+            <div class="col-sm-6">
+                <div style="z-index: 600;position: relative">
+                    <img style="width: 80px;height: 80px;margin-top: -60%;margin-left: -100%" src="" id="show_img">
+                </div>
+                <div style="z-index: 800;position: relative;opacity: 0">
+                    <input type="file" style="width: 80px;height: 80px;margin-top: -200%;margin-left: -100%" id="up-img" name="avatar">
+                </div>
+            </div>{{ obj.errors.pwd_again.0 }}<span id="msg"></span></div>
+         </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/static/jquery-3.2.1.js"></script>
+    <script>
+        $('#up-img').change(function () {
+            document.getElementById("ifr").onload=loadIframe;
+            $('#f2')[0].submit()
+        });
+        function loadIframe() {
+            var content = document.getElementById('ifr').contentWindow.document.body.innerText;
+            $('#show_img').attr('src',content);
+            $('#id_avatar').val(content)
+        }
+        $('#img-code').click(function () {
+            $(this).attr('src',$(this).attr('src')+'?')
+        })
+
+    </script>
+
+</body>
+</html>

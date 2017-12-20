@@ -1,0 +1,49 @@
+{% extends 'user.html' %}
+
+{% block css %}
+<style>
+    .content{
+        position: absolute;
+        left: 300px;
+        right: 0;
+        top: 60px;
+        bottom: 0;
+        min-width: 990px;
+        overflow: scroll;
+        z-index: 99;
+}
+    .b-text{
+        margin-top: 30px;
+        margin-bottom: 10px;
+        border-bottom: 1px dashed #E8E7D0;
+}
+</style>
+{% endblock %}
+
+{% block html %}
+
+
+{% for row in obj %}
+    <div class="b-text" style="margin-top: 10px;">
+        <div><a href="/{{ blog_msg.site }}/p/{{ row.nid }}.html">{{ row.title }}</a> </div>
+        <div style="line-height: 30px">{{ row.summary }}</div>
+        <div style="margin-bottom: 10px">
+            {{ row.create_time|date:"Y-m-d H:i:s" }}
+            <span>阅读({{ row.read_count }})</span>
+            <span><a href="">评论({{ row.comment_count }})</a></span>
+            <span><a href="">编辑</a></span>
+        </div>
+    </div>
+
+{% endfor %}
+    <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {{ page_info.pager|safe }}
+            </ul>
+    </nav>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

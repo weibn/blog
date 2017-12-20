@@ -1,0 +1,55 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: #ededed
+}
+.navbar{
+}
+.my_outer{
+    font-family: "宋体",Arial,Helvetica,sans-serif;
+    position: absolute;
+    margin-top: 50px;
+}
+.my_content{
+    background-color: white;
+}
+.my_content .my_title{
+    color: cornflowerblue;
+    font-size: 20px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.my_text{
+}
+.my_content .my_ati{
+    height: 180px;
+    border-bottom: 1px dashed #E8E7D0;
+
+}
+.my_content  .my_avatar{
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 1px;
+    vertical-align: top;
+    float: left;
+}
+.my_content .ati_text{
+    /*color: #333;*/
+    /*font-size: 12px;*/
+    /*display: inline-block;*/
+    /*line-height: 20px;*/
+    /*margin-left: 20px;*/
+}
+.my_content .ati_bottom{
+    margin-top: 10px;
+}
+.my_content .my_active{
+    margin-left: 20px;
+}
+.my_content .ati_text a{
+    color: #333;
+}

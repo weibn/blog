@@ -1,0 +1,249 @@
+{% extends 'user.html' %}
+
+{% block css %}
+<style>
+    .outer-com{
+        position: relative;
+        margin-left: 10px;
+
+    }
+    .inner-com{
+        padding: 5px;
+        margin: 2px;
+        border:1px dashed #ccc;
+    }
+    .up_down{
+        margin-top: 50px;
+}
+    .up_down #add-up{
+        float: right;
+        margin-right: 30px;
+    }
+    .text-bottom{
+        position: relative;
+        border-bottom: 1px dashed #ccc;
+        text-align: right;
+        margin: 200px 0 0;
+        padding: 5px 0;
+    }
+    .reply{
+{#        color: #337ab7;#}
+{#        cursor:pointer;#}
+        float: right;
+{#        margin-right: 20px;#}
+    }
+    .reply-del{
+        color: #337ab7;
+        cursor:pointer;
+        float: right;
+        margin-right: 20px;
+    }
+    .reply-del:hover{
+        text-decoration: underline ;
+    }
+</style>
+{% endblock %}
+
+{% block html %}
+{#    文章标题#}
+<h1>{{ obj.title }}</h1>
+{#    文章内容#}
+<div id="d1">{{ obj.articledetail.content|safe }}</div>
+    {% csrf_token %}
+{#    点赞#}
+    <div class="up_down" >
+        <div style="float:right;width: 40px;height: 40px;border:1px solid #ccc;margin-right: 200px" id="add-down" class="my_active">
+            <i class="fa fa-thumbs-o-down fa-3x" aria-hidden="true" >
+            </i>
+            <span style="font-size: 20px" id="down-num">{{ obj.down_count }}</span>
+        </div>
+        <div id="add-up" style="width: 40px;height: 40px;
+            border:1px solid #ccc;left: 600px" class="my_active" >
+            <i class="fa fa-thumbs-o-up fa-3x" aria-hidden="true"   >
+            </i>
+            <span style="font-size: 20px" id="up-num">{{ obj.up_count }}</span>
+        </div>
+        <div style="float: right;color:red;margin-top: 80px; margin-right: -100px" id="msg"></div>
+    </div>
+    <div class="text-bottom"></div>
+
+{#评论#}
+<div id="d2">
+    <p id="abc">评论列表</p>
+{#    {% for foo in comment %}#}
+    <div id="d3">
+{#        <a href="" class="re">#<span class="re-num">{{ foo.0 }}</span>楼</a> {{ foo.1.create_time|date:"Y-m-d H:i:s" }}#}
+{#        <span style="display: none">{{ foo.1.nid }}</span>#}
+{#        <a href="/{{ foo.1.user.blog.site }}.html">{{ foo.1.user.nickname }}</a>#}
+{#        <div class="reply">#}
+{#            <a href="#reply-text">回复</a>#}
+{#        </div>#}
+{#        {% if foo.1.user.nid == request.session.user_id  %}#}
+{#            <div style="float: right;margin-right: 10px" class="reply-del">删除</div>#}
+{#        {% elif foo.1.article.blog.user.nid == request.session.user_id %}#}
+{#            <div style="float: right;margin-right: 10px" class="reply-del">删除</div>#}
+{#        {% endif %}#}
+{#        <div style="float: right;margin-right: 10px" class="reply-del">删除</div>#}
+{#        <div style="border: 1px dashed #ccc;padding: 10px;">#}
+{#            {{ foo.1.content }}#}
+{#        </div>#}
+    </div>
+</div>
+{#    {% endfor %}#}
+    <div class="reply-div"></div>
+    {% if userinfo %}
+        <div>
+            <p>发表评论</p>
+            <p>昵称：{{ userinfo.nickname }}</p>
+            <p>评论内容：</p>
+        </div>
+        <form>
+            {% csrf_token %}
+            <input type="text" style="display: none" id="replyid">
+            <textarea class="form-control" id="reply-text" rows="15" style="width: 500px" name="reply"></textarea>
+            <button type="button" id="replyclick">提交</button>
+        </form>
+    {% else %}
+        <p><a href="/reg.html">注册</a>用户<a href="/login.html?url={{ url }}" id="login">登录</a>后才可发表评论。</p>
+    {% endif %}
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="/static/jquery-3.2.1.js"></script>
+    <script src="/static/jquery.cookie.js"></script>
+    <script>
+
+        String.prototype.Format = function (arg) {
+                var temp = this.replace(/\{(\w+)\}/g,function (k,v) {
+                    return arg[v];
+                });
+                return temp;
+            };
+        function commentTree(arg) {
+            var com_str = "<div class='outer-com'>";
+            $.each(arg,function (k,row) {
+                var temp = "<div class='inner-com'>{content}</div>".Format({content:row.comment__content});
+                com_str += temp;
+                if(row.child.length>0){
+                    com_str += commentTree(row.child);
+                }
+            });
+            com_str += "</div>";
+            return com_str;
+        }
+
+        $(function () {
+            //评论展示：
+            $.ajax({
+                url:'/check_comment/?id={{ obj.nid }}',
+                type:'GET',
+                dataType:'JSON',
+                success:function (arg) {
+                    if (arg.status){
+                        var content = commentTree(arg.data);
+                        $('#d3').append(content);
+                    }else {
+                        alert(arg.data)
+                    }
+                }
+            });
+
+
+            //点赞
+            var token = $.cookie('csrftoken');
+            var obj = {
+                "num": $("#up-num").text(),
+               "url": window.location.pathname//获取当前url
+            };
+            $(".my_active").click(function () {
+                var res = $(this).attr('id');
+                obj["res"]=res;
+                $.ajax({
+                    url: '/add_up/',
+                    type: 'POST',
+                    headers:{'X-CSRFToken': token},
+                    dataType:'JSON',
+                    data: obj,
+                    success: function (data) {
+                        //登录过
+                     if (data.sta){
+                         //点过赞
+                         if(data.msg){
+                             $('#msg').text(data.msg)
+                         }else {
+                             if(data.stype=='up'){
+                                 $('#up-num').text(data.num)
+                             }else {
+                                 $('#down-num').text(data.num)
+                             }
+                         }
+                         //没登陆
+                     }else {
+                         $('#msg').html('请先<a href="/login.html?url={{ url }}">登录</a>！')
+                     }
+                    }
+             });
+            });
+
+            //评论
+            var replyid = new Array();
+            //回复 @+昵称
+            $('.reply').click(function () {
+                var repid = $($(this).prevAll()[1]).text();
+                var rep = $(this).prev().text();
+                $('#reply-text').val('@'+rep+'\n');
+                replyid[0]=repid;
+            });
+            $('#replyclick').click(function () {
+                window.location.hash = "#abc";
+                if($.inArray('@', $('#reply-text').val())==-1){
+                    replyid=[];
+                }
+                $.ajax({
+                    url: '/comment/',
+                    type: 'POST',
+                    headers:{'X-CSRFToken': token},
+                    dataType:'JSON',
+                    data: {"rep_id":replyid[0],'content':$('#reply-text').val(),'w-url':window.location.pathname},
+                    success: function (data) {
+                        //页面显示评论
+                        $('.reply-div').attr('style','border: 1px dashed #ccc;padding: 10px;margin: 20px 0;display: block');
+                        $('.reply-div').text($('#reply-text').val());
+                        //清空输入框
+                        $('#reply-text').val("")
+                    }
+                })
+            });
+
+            $('.reply-del').click(function () {
+                var repid = $($(this).prevAll()[2]).text();
+                $(this).parent().remove();
+                $.ajax({
+                    url:'/del_comment/',
+                    type:'POST',
+                    headers:{'X-CSRFToken': token},
+                    dataType:'JSON',
+                    data: {'w-url':window.location.pathname,'reply_id':repid},
+                     success: function (data) {
+                        console.log($(this));
+                     }
+                })
+            })
+        });
+
+        //将楼层索引+1为正常显示
+{#        window.onload=function () {#}
+{#            var r_num = $('.re .re-num').text();#}
+{#            $('.re .re-num').text(parseInt(r_num)+1);#}
+{#        }#}
+{#    window.onload=function () {#}
+{#        console.log({{ com }});#}
+{#        for (i;i in {{ com }};i++){#}
+{#            console.log(i)#}
+{#        }#}
+{#        $('.comment-list').text(i)#}
+{#    };#}
+    </script>
+{% endblock %}

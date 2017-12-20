@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="/static/css/blog.css">
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <nav class=" blog-header col-sm-12" >
+        <div class="col-sm-offset-1 col-sm-10" style="line-height: 60px">
+            <p style="font-size: 20px;color: white;display: inline-block">{{ blog_msg.title }}</p>
+{#            <div style="float: right">#}
+                <ul style="float: right" >
+                    <li><a href="">管理</a> </li>
+                    <li><a href="">个人首页</a> </li>
+                    <li><a href="/">首页</a> </li>
+                </ul>
+{#            </div>#}
+        </div>
+    </nav>
+    <div class="b-body">
+        <div class="menus  ">
+            <p>公告</p>
+            <ul>
+                <li>昵称：{{ blog_msg.user.nickname }}</li>
+                <li>粉丝：{{ blog_msg.user.fans.count }}</li>
+                <li>关注：{{ blog_msg.user.followers.all.count }}</li>
+                <li>邮箱：{{ blog_msg.user.email }}</li>
+            </ul>
+            <p>人生是一场独自的修行</p>
+            <p>标签</p>
+            <ul>
+                {% for foo in tags_list %}
+                    <li><a href="/{{ blog_msg.site }}/tags/{{ foo.tags__nid }}.html">{{ foo.tags__title }}({{ foo.c }})</a></li>
+                {% endfor %}
+            </ul>
+            <p>分类</p>
+            <ul>
+                {% for foo in cate_list %}
+                        <li><a href="/{{ blog_msg.site }}/category/{{ foo.category__nid }}.html">{{ foo.category__title }}({{ foo.c }})</a></li>
+                {% endfor %}
+            </ul>
+            <p>时间</p>
+            <ul>
+                {% for foo in date_list %}
+                    <li><a href="/{{ blog_msg.site }}/time/{{ foo.c}}.html">{{ foo.c }}({{ foo.ct }})</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="content" style="padding:0 200px 0 50px" >
+            {% block html %}{% endblock %}
+
+            {% block script %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

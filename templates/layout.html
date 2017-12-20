@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="/static/css/commons.css" />
+    <link rel="stylesheet" href="/static/jquery-3.2.1.js">
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <div class="pg-header">
+        <div class="logo left">葫芦娃后台管理</div>
+        <div class="avatar right" style="position: relative">
+            <img style="width: 40px;height: 40px;" src="/static/img/timg.jpg">
+            <div class="user-info">
+                <a>个人资料</a>
+                <a>注销</a>
+            </div>
+        </div>
+        <div class="rmenus right">
+            <a href="/{{ blog.site }}.html" style="float: left!important;"><i class="fa fa-commenting-o" aria-hidden="true"></i> 博客首页</a>
+            <a><i class="fa fa-commenting-o" aria-hidden="true"></i> 消息</a>
+            <a><i class="fa fa-envelope-o" aria-hidden="true"></i> 邮件</a>
+        </div>
+    </div>
+    <div class="pg-body">
+        <div class="menus">
+            <a href="/article_manage/0-0-0.html"><i class="fa fa-futbol-o" aria-hidden="true"></i> 文章管理</a>
+            <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 分类管理</a>
+            <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 标签管理</a>
+            <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 个人信息</a>
+        </div>
+        <div class="content">
+
+            {% block html  %}{% endblock %}
+
+        </div>
+    </div>
+    {% block js %}{% endblock %}
+</body>
+</html>
