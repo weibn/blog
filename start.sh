@@ -1,1 +1,0 @@
-uwsgi --reload uwsgi.pid
