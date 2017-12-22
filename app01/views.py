@@ -10,10 +10,9 @@ import os,json
 from django.db.models import Count,Min,Max,Sum
 
 
-#博客主页面
+# 博客主页面
 def index(request,*args,**kwargs):
     """
-
     :param obj: 主站分类，Python,Golang
     :param args:
     :param kwargs: 点击的主站ID
@@ -154,10 +153,10 @@ def user(request,*args,**kwargs):
     cate_list = models.Article.objects.filter(blog__site=site).values('category__title','category__nid').annotate(c=Count('nid'))
     tags_list = models.Article.objects.filter(blog__site=site).values('tags__title','tags__nid').annotate(c=Count(1))
     #mysql查询
-    # data_time = models.Article.objects.extra(select={'c':'date_fomat(create_time,"%%Y-%%m")'}).values('c').annotate(ct=Count('nid'))
+    date_list = models.Article.objects.extra(select={'c':'date_fomat(create_time,"%%Y-%%m")'}).values('c').annotate(ct=Count('nid'))
     #sqlite3查询
-    date_list = models.Article.objects.filter(blog__site=site).extra(select={'c':'strftime("%%Y-%%m",create_time)'}).\
-        values('c').annotate(ct=Count('nid'))
+    # date_list = models.Article.objects.filter(blog__site=site).extra(select={'c':'strftime("%%Y-%%m",create_time)'}).\
+    #     values('c').annotate(ct=Count('nid'))
 
 
     blog_msg = models.Blog.objects.filter(site=site).first()

@@ -20,8 +20,8 @@ from app02 import views2
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'login.html$', views.login),
-    url(r'reg.html$', views.reg),
+    url(r'^login.html$', views.login),
+    url(r'^reg.html$', views.reg),
     url(r'^all/(?P<type_id>\d+)/', views.index),
     url(r'^check_code/', views.check_code),
     url(r'^up_img/', views.up_img),
@@ -43,6 +43,6 @@ urlpatterns = [
     url(r'^(?P<site>\w+)/(?P<family>\w+)/(?P<nid>\d+-?\d*).html$', views.user),
     url(r'^(?P<site>\w+).html$', views.user),
 
-    url(r'index.html', views.index),
+    url(r'^index.html', views.index),
     url(r'', views.me),
 ]
