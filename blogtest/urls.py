@@ -41,8 +41,10 @@ urlpatterns = [
 
     url(r'^(?P<site>\w+)/p/(?P<nid>\d+).html$', views.page),
     url(r'^(?P<site>\w+)/(?P<family>\w+)/(?P<nid>\d+-?\d*).html$', views.user),
-    url(r'^(?P<site>\w+).html$', views.user),
 
     url(r'^index.html', views.index),
+
+    url(r'^(?P<site>\w+).html$', views.user),
+
     url(r'', views.me),
 ]
