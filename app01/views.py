@@ -6,8 +6,9 @@ from utils.random_check_code import rd_check_code
 from utils.pager import PageInfo
 from io import BytesIO
 from utils.FormInfo import LoginInfo,RegForm,ArticleForm
-import os
+import os,json
 from django.db.models import Count,Min,Max,Sum
+
 
 #博客主页面
 def index(request,*args,**kwargs):
@@ -42,6 +43,7 @@ def index(request,*args,**kwargs):
                                         'user_list':user_list,'type_id':type_id,
                                         'userinfo':userinfo})
 
+
 #验证码视图
 def check_code(request):
     img, code = rd_check_code()
@@ -49,6 +51,7 @@ def check_code(request):
     img.save(stream, 'png')
     request.session['code'] = code
     return HttpResponse(stream.getvalue())
+
 
 #登录页面
 def login(request):
@@ -78,20 +81,22 @@ def login(request):
 
                     try:
                         if url == 'None':
-                            return redirect('/')
+                            return redirect('/index.html')
                         else:
                             return redirect(url)
                     except Exception as e:
-                        return redirect('/')
+                        return redirect('/index.html')
 
         else:
             # return redirect('/login.html')
             return render(request,'login.html',{'msg':"验证码出错",'obj':obj})
 
+
 #登出系统
 def logout(request):
     request.session.clear()
-    return redirect('/')
+    return redirect('/index.html')
+
 
 #注册页面
 def reg(request):
@@ -113,6 +118,7 @@ def reg(request):
             obj.cleaned_data.pop('code')
             models.UserInfo.objects.create(**obj.cleaned_data)
             return redirect('/login.html')
+
 
 #个人博客主页面
 def user(request,*args,**kwargs):
@@ -161,6 +167,7 @@ def user(request,*args,**kwargs):
     return render(request,'home.html',{'obj':obj,'blog_msg':blog_msg,'date_list':date_list,
                                        'cate_list':cate_list,'tags_list':tags_list,'page_info':page_info})
 
+
 #文章详细
 def page(request,*args,**kwargs):
     site = kwargs.get('site')
@@ -196,6 +203,7 @@ def page(request,*args,**kwargs):
     return render(request,'page.html',{'obj':obj,'blog_msg':blog_msg,'date_list':date_list,'userinfo':userinfo,
                                        'cate_list':cate_list,'tags_list':tags_list,'url':url})
 
+
 #头像上传
 def up_img(request):
     if request.method == 'GET':
@@ -209,8 +217,8 @@ def up_img(request):
         f.close()
         return HttpResponse(file_path)
 
+
 #点赞功能
-import json
 def add_up(request):
     #信息列表
     ret = {}
@@ -257,6 +265,7 @@ def add_up(request):
 
         return HttpResponse(json.dumps(ret))
 
+
 #评论
 from django.db.models import F
 def comment(request):
@@ -271,6 +280,7 @@ def comment(request):
     models.Article.objects.filter(nid=aid).update(comment_count=F('comment_count')+1)
     return HttpResponse(json.dumps('ok'))
 
+
 #删除评论
 def del_comment(request):
     url = request.POST.get('w-url')
@@ -283,10 +293,11 @@ def del_comment(request):
 
     return HttpResponse(json.dumps('ok'))
 
+
 def check_comment(request):
     user_id = request.session.get('user_id')
     if not user_id:
-        return redirect('/')
+        return redirect('/index.html')
     nid = request.GET.get('id')
     #获取评论
     ret = {'status':True,'data':None}
@@ -323,18 +334,18 @@ def check_comment(request):
     #     return com_str
 
 
-
 def control(request):
     nid = request.session.get('user_id')
     if not nid:
-        return redirect('/')
+        return redirect('/index.html/')
     blog = models.Blog.objects.filter(user_id=nid).first()
     return render(request,'control.html',{'blog':blog})
+
 
 def article_manage(request,*args,**kwargs):
     nid = request.session.get('user_id')
     if not nid:
-        return redirect('/')
+        return redirect('/index.html')
     blog = models.Blog.objects.filter(user_id=nid).first()
 
     condition = {}
@@ -362,10 +373,11 @@ def article_manage(request,*args,**kwargs):
                                                  'category_list':category_list,'tag_list':tag_list,
                                                  'page_info':page_info,'blog':blog})
 
+
 def add_article(request):
     nid = request.session.get('user_id')
     if not nid:
-        return redirect('/')
+        return redirect('/index.html')
     if request.method == 'GET':
         obj = ArticleForm(request)
         return render(request,'add_article.html',{'obj':obj})
@@ -389,9 +401,6 @@ def add_article(request):
             return redirect('/control.html')
 
 
-
-
-
 def upload_img(request):
     import os
     upload_type = request.GET.get('dir')  #可以判断媒体类型
@@ -408,3 +417,8 @@ def upload_img(request):
     }
     import json
     return HttpResponse(json.dumps(dic))
+
+
+def me(request):
+
+    return render(request,'me.html')

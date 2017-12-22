@@ -39,12 +39,10 @@ urlpatterns = [
     url(r'^article_manage/(?P<article_type_id>\d+)-(?P<category_id>\d+)-(?P<tags__nid>\d+).html$', views.article_manage),
 
 
-
     url(r'^(?P<site>\w+)/p/(?P<nid>\d+).html$', views.page),
     url(r'^(?P<site>\w+)/(?P<family>\w+)/(?P<nid>\d+-?\d*).html$', views.user),
     url(r'^(?P<site>\w+).html$', views.user),
 
-
-
-    url(r'', views.index),
+    url(r'index.html', views.index),
+    url(r'', views.me),
 ]
