@@ -153,7 +153,7 @@ def user(request,*args,**kwargs):
     cate_list = models.Article.objects.filter(blog__site=site).values('category__title','category__nid').annotate(c=Count('nid'))
     tags_list = models.Article.objects.filter(blog__site=site).values('tags__title','tags__nid').annotate(c=Count(1))
     #mysql查询
-    date_list = models.Article.objects.extra(select={'c':'date_fomat(create_time,"%%Y-%%m")'}).values('c').annotate(ct=Count('nid'))
+    # date_list = models.Article.objects.filter(blog__site=site).extra(select={'c':'DATE_FORMAT(create_time,"%%Y-%%m")'}).values('c').annotate(ct=Count('nid'))
     #sqlite3查询
     # date_list = models.Article.objects.filter(blog__site=site).extra(select={'c':'strftime("%%Y-%%m",create_time)'}).\
     #     values('c').annotate(ct=Count('nid'))
