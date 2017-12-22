@@ -163,7 +163,8 @@ def user(request,*args,**kwargs):
     # blog_time = models.Article.objects.filter(blog__site=site,create_time__year=2017).values('create_time').annotate(c=Count(1))
     # print(blog_time)
 
-    return render(request,'home.html',{'obj':obj,'blog_msg':blog_msg,'date_list':date_list,
+    return render(request,'home.html',{'obj':obj,'blog_msg':blog_msg,
+                                       # 'date_list':date_list,
                                        'cate_list':cate_list,'tags_list':tags_list,'page_info':page_info})
 
 
