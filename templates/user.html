@@ -43,12 +43,12 @@
                         <li><a href="/{{ blog_msg.site }}/category/{{ foo.category__nid }}.html">{{ foo.category__title }}({{ foo.c }})</a></li>
                 {% endfor %}
             </ul>
-            <p>时间</p>
-            <ul>
-                {% for foo in date_list %}
-                    <li><a href="/{{ blog_msg.site }}/time/{{ foo.c}}.html">{{ foo.c }}({{ foo.ct }})</a></li>
-                {% endfor %}
-            </ul>
+            <!-- <p>时间</p>
+{#            <ul>#}
+{#                {% for foo in date_list %}#}
+{#                    <li><a href="/{{ blog_msg.site }}/time/{{ foo.c}}.html">{{ foo.c }}({{ foo.ct }})</a></li>#}
+{#                {% endfor %}#}
+            </ul> -->
         </div>
         <div class="content" style="padding:0 200px 0 50px" >
             {% block html %}{% endblock %}
