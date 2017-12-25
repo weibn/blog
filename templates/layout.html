@@ -20,7 +20,11 @@
             </div>
         </div>
         <div class="rmenus right">
-            <a href="/{{ blog.site }}.html" style="float: left!important;"><i class="fa fa-commenting-o" aria-hidden="true"></i> 博客首页</a>
+            {% if blog.site %}
+                <a href="/{{ blog.site }}.html" style="float: left!important;"><i class="fa fa-commenting-o" aria-hidden="true"></i> 博客首页</a>
+            {% else %}
+                <a id="apply-tip" style="float: left!important;"><i class="fa fa-commenting-o" aria-hidden="true"></i> 博客首页</a>
+            {% endif %}
             <a><i class="fa fa-commenting-o" aria-hidden="true"></i> 消息</a>
             <a><i class="fa fa-envelope-o" aria-hidden="true"></i> 邮件</a>
         </div>
@@ -28,6 +32,7 @@
     <div class="pg-body">
         <div class="menus">
             <a href="/article_manage/0-0-0.html"><i class="fa fa-futbol-o" aria-hidden="true"></i> 文章管理</a>
+            <a href="/article_manage/0-0-0.html"><i class="fa " aria-hidden="true"></i> 文章管理</a>
             <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 分类管理</a>
             <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 标签管理</a>
             <a><i class="fa fa-futbol-o" aria-hidden="true"></i> 个人信息</a>
@@ -39,5 +44,10 @@
         </div>
     </div>
     {% block js %}{% endblock %}
+    <script>
+        $('#apply-tip').click(function () {
+            alert("请先开通博客！")
+        })
+    </script>
 </body>
 </html>
